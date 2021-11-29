@@ -38,17 +38,44 @@ public class TaskManager {
         System.out.println("r - remove");
         System.out.println("l - list");
         System.out.println("e - exit");
-        ListDisplay();
+        Input();
+    }
+
+    public static void Otheraction(){
+        System.out.println("\n" +"Would you like to perform other action? (y/n)");
+        Scanner scanList = new Scanner(System.in);
+        String input = scanList.nextLine();
+        switch (input){
+            case "y":
+                Menu();
+                break;
+            case "n":
+                break;
+        }
     }
 
 
-    public static void ListDisplay() {
+    public static void Input() {
         Scanner scanList = new Scanner(System.in);
-        String scanListString = scanList.nextLine();
-        if ("l".equals(scanListString)) {
-            ReadFile("src/main/Files/tasks.csv");
-        }
+        String input = scanList.nextLine();
+        switch(input){
+            case "l":
+                ReadFile("src/main/Files/tasks.csv");
+                Otheraction();
+                break;
+            case "a":
+                System.out.println("add");
+                Otheraction();
+                break;
+            case "r":
+                System.out.println("remove");
+                Otheraction();
+                break;
+            case "e":
+                break;
 
+
+        }
 
     }
 
