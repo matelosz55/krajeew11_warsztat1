@@ -2,7 +2,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -12,6 +15,7 @@ public class TaskManager {
 
     public static String[][] ReadFile(String directory) {
         Path path = Paths.get(directory);
+
         String[][] fileTable = new String[3][3];
         if (Files.exists(path)) {
             try {
@@ -41,11 +45,11 @@ public class TaskManager {
         Input();
     }
 
-    public static void Otheraction(){
-        System.out.println("\n" +"Would you like to perform other action? (y/n)");
+    public static void Otheraction() {
+        System.out.println("\n" + "Would you like to perform other action? (y/n)");
         Scanner scanList = new Scanner(System.in);
         String input = scanList.nextLine();
-        switch (input){
+        switch (input) {
             case "y":
                 Menu();
                 break;
@@ -58,13 +62,14 @@ public class TaskManager {
     public static void Input() {
         Scanner scanList = new Scanner(System.in);
         String input = scanList.nextLine();
-        switch(input){
+        switch (input) {
             case "l":
                 ReadFile("src/main/Files/tasks.csv");
                 Otheraction();
                 break;
             case "a":
                 System.out.println("add");
+                Add();
                 Otheraction();
                 break;
             case "r":
@@ -76,6 +81,33 @@ public class TaskManager {
 
 
         }
+
+    }
+
+    public static void Add() {
+        System.out.println("Add task description, please");
+        Scanner scan = new Scanner(System.in);
+        String excerciseInput = scan.nextLine();
+
+        System.out.println("Add task due date, please");
+        Scanner scan1 = new Scanner(System.in);
+        String dueDate = scan1.nextLine();
+
+        System.out.println("Is your task important? (true/false)");
+        Scanner scan2 = new Scanner(System.in);
+        String importance = scan2.nextLine();
+        //Funkcja zapisu
+
+        Path path = Paths.get("src/main/Files/tasks.csv");
+        List<String> outList = new ArrayList<>();
+        String record = excerciseInput + ", " + dueDate + ", " + importance;
+        try {
+            Files.writeString(path, "\n", StandardOpenOption.APPEND);
+            Files.writeString(path, record, StandardOpenOption.APPEND);
+        } catch (IOException ex) {
+            System.out.println("Cannot save this line to the file.");
+        }
+
 
     }
 
