@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +15,7 @@ public class TaskManager {
         Menu();
     }
 
-    public static String[][] ReadFile(String directory) {
+    public static void ReadFile(String directory) {
         Path path = Paths.get(directory);
         int i = 0;
         if (Files.exists(path)) {
@@ -27,7 +29,6 @@ public class TaskManager {
                 System.out.println(e);
             }
         }
-        return null;
 
     }
 
@@ -68,7 +69,8 @@ public class TaskManager {
                 Otheraction();
                 break;
             case "r":
-                System.out.println("remove");
+
+                RemoveFunction();
                 Otheraction();
                 break;
             case "e":
@@ -91,7 +93,6 @@ public class TaskManager {
         System.out.println("Is your task important? (true/false)");
         Scanner scan2 = new Scanner(System.in);
         String importance = scan2.nextLine();
-        //Funkcja zapisu
 
         Path path = Paths.get("src/main/Files/tasks.csv");
         List<String> outList = new ArrayList<>();
@@ -103,6 +104,50 @@ public class TaskManager {
             System.out.println("Cannot save this line to the file.");
         }
 
+
+    }
+
+    public static void RemoveFunction() {
+        System.out.println("Type line number to remove.");
+        Scanner scan = new Scanner(System.in);
+        int numberOfLine = scan.nextInt();
+        Path path = Paths.get("src/main/Files/tasks.csv");
+
+        int i = 0;
+        int j = 0;
+        try {
+            for (String s : Files.readAllLines(path)) {
+                i++;
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        String[] table = new String[i];
+        try {
+            for (String s : Files.readAllLines(path)) {
+                table[j] = s;
+                j++;
+
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        String[] result = ArrayUtils.remove(table, numberOfLine);
+        System.out.println(Arrays.toString(result));
+        List<String> outList = new ArrayList<>();
+
+
+        try {
+            for (int k = 0; k < result.length; k++){
+                outList.add(result[k]);
+                Files.write(path, outList);
+
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
     }
 
