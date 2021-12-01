@@ -1,6 +1,8 @@
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,7 +13,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+
         Menu();
     }
 
@@ -32,7 +35,7 @@ public class TaskManager {
 
     }
 
-    public static void Menu() {
+    public static void Menu() throws FileNotFoundException {
         System.out.println(pl.coderslab.ConsoleColors.BLUE + "Please select an option:");
         System.out.println(pl.coderslab.ConsoleColors.RESET + "a - add");
         System.out.println("r - remove");
@@ -41,7 +44,7 @@ public class TaskManager {
         Input();
     }
 
-    public static void Otheraction() {
+    public static void Otheraction() throws FileNotFoundException {
         System.out.println("\n" + "Would you like to perform other action? (y/n)");
         Scanner scanList = new Scanner(System.in);
         String input = scanList.nextLine();
@@ -55,7 +58,7 @@ public class TaskManager {
     }
 
 
-    public static void Input() {
+    public static void Input() throws FileNotFoundException {
         Scanner scanList = new Scanner(System.in);
         String input = scanList.nextLine();
         switch (input) {
@@ -107,47 +110,70 @@ public class TaskManager {
 
     }
 
-    public static void RemoveFunction() {
+    public static int NumberOfLines() {
+        Path path = Paths.get("src/main/Files/tasks.csv");
+        int j = 0;
+        try {
+            for (String s : Files.readAllLines(path)) {
+                j++;
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return j;
+
+    }
+
+    public static void RemoveFunction() throws FileNotFoundException {
         System.out.println("Type line number to remove.");
         Scanner scan = new Scanner(System.in);
         int numberOfLine = scan.nextInt();
         Path path = Paths.get("src/main/Files/tasks.csv");
 
-        int i = 0;
-        int j = 0;
-        try {
-            for (String s : Files.readAllLines(path)) {
-                i++;
+        if (numberOfLine > -1 && numberOfLine < NumberOfLines() && NumberOfLines() != 0) {
+
+            String[] table = new String[NumberOfLines()];
+
+            int j = 0;
+            try {
+                for (String s : Files.readAllLines(path)) {
+                    table[j] = s;
+                    j++;
+                }
+            } catch (IOException e) {
+                System.out.println(e);
             }
-        } catch (IOException e) {
-            System.out.println(e);
+
+            String[] result = ArrayUtils.remove(table, numberOfLine);
+            List<String> outList = new ArrayList<>();
+
+
+            if (NumberOfLines() == 0) {
+                System.out.println("There are no records left in the file.");
+            } else if (NumberOfLines() == 1) {
+                PrintWriter pw = new PrintWriter("src/main/Files/tasks.csv");
+                pw.close();
+
+
+            } else {
+                try {
+                    for (int k = 0; k < result.length; k++) {
+                        outList.add(result[k]);
+                        Files.write(path, outList);
+
+                    }
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }
+
+        } else {
+            System.out.println("Provided number out of database range - number of lines in current file: " + NumberOfLines());
+
+
         }
 
-        String[] table = new String[i];
-        try {
-            for (String s : Files.readAllLines(path)) {
-                table[j] = s;
-                j++;
-
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        String[] result = ArrayUtils.remove(table, numberOfLine);
-        System.out.println(Arrays.toString(result));
-        List<String> outList = new ArrayList<>();
-
-
-        try {
-            for (int k = 0; k < result.length; k++){
-                outList.add(result[k]);
-                Files.write(path, outList);
-
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
 
     }
 
