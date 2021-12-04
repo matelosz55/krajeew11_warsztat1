@@ -58,6 +58,8 @@ public class TaskManager {
                 Menu();
                 break;
             case "n":
+                System.out.println(pl.coderslab.ConsoleColors.RED + "Bye Bye.");
+                System.out.println(pl.coderslab.ConsoleColors.RESET);
                 break;
         }
     }
@@ -81,6 +83,8 @@ public class TaskManager {
                 Otheraction();
                 break;
             case "e":
+                System.out.println(pl.coderslab.ConsoleColors.RED + "Bye Bye.");
+                System.out.println(pl.coderslab.ConsoleColors.RESET);
                 break;
         }
 
